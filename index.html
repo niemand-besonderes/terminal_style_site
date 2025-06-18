@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+<head>
+  <meta charset="UTF-8">
+  <title>Matzetech</title>
+  <style>
+    body {
+      background-color: black;
+      color: rgb(0, 216, 0);
+      font-family: monospace;
+      padding: 20px;
+      font-size: x-large;
+    }
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background-color: rgb(0, 216, 0);
+      margin-left: 4px;
+      animation: blink 1s step-start infinite;
+      box-shadow: 0 0 6px rgb(0, 216, 0), 0 0 12px rgb(0, 216, 0);
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    a {
+      color: rgb(0, 216, 0);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 20px;
+    }
+    a:hover {
+      color: rgb(182, 255, 175);
+      text-shadow: 1px 1px 4px rgb(0,216,0), 0 0 1em rgb(0,200,0), 0 0 0.2em rgb(0,180,0);
+      font-size: 30px;
+    }
+    h1 {
+      color: #fce7b2;
+      text-shadow: 0px 0px 2px rgb(110, 109, 0), 0 0 1em rgb(157, 200, 0), 0 0 0.2em rgb(162, 180, 0);
+      font-size: 50px;
+    }
+    ul {
+      font-size: 20px;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div id="terminal"></div>
+<div id="content" class="hidden">
+  <h1>user@Matzetech:~$ Willkommen auf meinem Server</h1>
+  <p>Wähle einen der folgenden Befehle:</p>
+  <ul>
+    <a href="https://searxng.matzetech.de" target="_blank">./Suchmaschine<br></a>
+    <a href="https://cloud.matzetech.de" target="_blank">./Hausaufgabencloud<br></a>
+    <a href="https://immich.matzetech.de" target="_blank">./immich<br></a>
+    <a href="mailto:matze.b@mail.de">./Kontakt<br></a>
+  </ul>
+  <div style="margin-top:30px; border-top:1px solid rgb(0,100,0); padding-top:10px; font-size: 0.9em;">
+    <p># Klicke auf einen Befehl, um weitergeleitet zu werden.</p>
+  </div>
+</div>
+
+<audio id="startupSound" src="startupME.mp3" preload="auto"></audio>
+
+<script>
+  const terminal = document.getElementById('terminal');
+  const content = document.getElementById('content');
+  const sound = document.getElementById('startupSound');
+
+  const messages = [
+    'Verbindung zum Server wird hergestellt...',
+    'Authentifiziere user@Matzetech...',
+    'Zugriff gewährt. Willkommen, user!\n'
+  ];
+
+  let index = 0;
+
+  function showNextMessage() {
+    if (index < messages.length) {
+      const p = document.createElement('p');
+      p.textContent = messages[index];
+      terminal.appendChild(p);
+      index++;
+      setTimeout(showNextMessage, 800);
+    } else {
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      terminal.appendChild(cursor);
+
+      sound.play();
+
+      setTimeout(() => {
+        terminal.classList.add('hidden');
+        content.classList.remove('hidden');
+      }, 1200);
+    }
+  }
+
+  showNextMessage();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Terminal Style Site</title>
+  <style>
+    body {
+      background-color: black;
+      color: rgb(0, 216, 0);
+      font-family: monospace;
+      padding: 20px;
+    }
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background-color: rgb(0, 216, 0);
+      margin-left: 4px;
+      animation: blink 1s step-start infinite;
+      box-shadow: 0 0 6px rgb(0, 216, 0), 0 0 12px rgb(0, 216, 0);
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    a {
+      color: rgb(0, 216, 0);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      color: white;
+      text-shadow: 1px 1px 2px rgb(0,216,0), 0 0 1em rgb(0,200,0), 0 0 0.2em rgb(0,180,0);
+    }
+    .hidden { display: none; }
+    .menu-item {
+      margin: 5px 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="start-menu">
+    <h1>Grub Bootloader</h1>
+    <p>Wähle eine Option:</p>
+    <div class="menu-item" onclick="startLogin('about')">1. Website 1 - /about</div>
+    <div class="menu-item" onclick="startLogin('projects')">2. Website 2 - /projects</div>
+    <div class="menu-item" onclick="startLogin('contact')">3. Website 3 - /contact</div>
+  </div>
+
+  <div id="terminal" class="hidden"></div>
+  <div id="content" class="hidden">
+    <h1>user@Matzetech:~$ Willkommen auf meiner Seite</h1>
+    <p>Du hast folgende Auswahl getroffen: <span id="selection"></span></p>
+    <ul>
+      <li><a href="https://example.com" target="_blank">./about</a></li>
+      <li><a href="https://example.com/projects" target="_blank">./projects</a></li>
+      <li><a href="mailto:kontakt@example.com">./contact</a></li>
+    </ul>
+    <div style="margin-top:30px; border-top:1px solid rgb(0,100,0); padding-top:10px; font-size: 0.9em;">
+      <p># Tippe einen Befehl an, um mehr zu erfahren.</p>
+    </div>
+  </div>
+
+  <audio id="startupSound" src="win95-startup.mp3" preload="auto"></audio>
+
+  <script>
+    const terminal = document.getElementById('terminal');
+    const content = document.getElementById('content');
+    const startMenu = document.getElementById('start-menu');
+    const selection = document.getElementById('selection');
+    const sound = document.getElementById('startupSound');
+
+    function startLogin(selectedSite) {
+      // Das Startmenü ausblenden
+      startMenu.classList.add('hidden');
+      
+      // Zeige Login Simulation
+      let index = 0;
+      const messages = [
+        'Verbindung zum Server wird hergestellt...',
+        'Authentifiziere user@Matzetech...',
+        'Zugriff gewährt. Willkommen, user!\\n'
+      ];
+
+      function showNextMessage() {
+        if (index < messages.length) {
+          const p = document.createElement('p');
+          p.textContent = messages[index];
+          terminal.appendChild(p);
+          index++;
+          setTimeout(showNextMessage, 800);
+        } else {
+          const cursor = document.createElement('span');
+          cursor.className = 'cursor';
+          terminal.appendChild(cursor);
+
+          sound.play();
+
+          // Zeige die ausgewählte Seite
+          setTimeout(() => {
+            terminal.classList.add('hidden');
+            content.classList.remove('hidden');
+            selection.textContent = selectedSite;
+          }, 1200);
+        }
+      }
+
+      showNextMessage();
+    }
+  </script>
+
+</body>
+</html>
